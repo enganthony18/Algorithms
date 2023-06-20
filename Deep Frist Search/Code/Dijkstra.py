@@ -20,3 +20,93 @@ Edges = [(0, 5, {'weight': 1}), (0, 7, {'weight': 9}), (0, 11, {'weight': 11}),
         (12, 17, {'weight': 8}), (13, 15, {'weight': 1}), (13, 18, {'weight': 9}),
         (13, 19, {'weight': 6}), (14, 18, {'weight': 9}), (15, 18, {'weight': 2}),
         (17, 18, {'weight': 14}), (17, 19, {'weight': 13})]
+
+#Define a big enough number to distinguish between valid weights.
+intmax = 999999999
+
+class Graph():
+
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = [[0 for column in range(vertices)] for row in range(vertices)]
+
+    def fill_Matrix(self):
+        for edge in Edges:
+            g.graph[ edge[0] ][ edge[1] ] = edge[2]["weight"]
+            g.graph[ edge[1] ][ edge[0] ] = edge[2]["weight"]
+
+    # Print the Adjacent Matrix to validate the correctness of the fillment.
+    def printMatrix(self):
+        for node in Nodes:
+            print(self.graph[node])
+        
+    def printShortestDistances(self, distance, source):
+        print("Vertex \tDistance from Source", source)
+        for node in range(self.V):
+            print(node, "\t", distance[node])
+
+# Find the the minimum value in distance list that has not been visited yet
+# Fill the visitedOrder list
+    def minDistanceEdge(self, distance, visitedMarking, visitedOrder):
+        min = intmax
+        min_index = None
+        for vertix in range(self.V):
+            if distance[vertix] < min and visitedMarking[vertix] == False:
+                min = distance[vertix]
+                min_index = vertix
+        visitedOrder.append( min_index )
+        # Return the vertix in which the minimum distance is found
+        return min_index
+
+# Dijkstra Algorithm
+    def dijkstra_ALGA(self, source, destination):
+        # List of infinite values of distance
+        distance = [intmax] * self.V
+        # Mark the starting point to be 0th vertix
+        distance[source] = 0
+        # List to mark the visited vertices
+        visitedMarking = [False] * self.V
+        # List of visited vertices.
+        visitedOrder = []
+        # Immediate source list
+        immSrc = [0] * self.V
+
+        path = []
+
+        # Iterate over all the vertices
+        for vertix in range(self.V):
+            # Place the pointer at the vertix which has the current minimum distance
+            pointer = self.minDistanceEdge(distance, visitedMarking, visitedOrder)
+            # Mark the vertix with the minimum distance as visited
+            visitedMarking[pointer] = True
+
+            # Iterate over the distances
+            for edge_weight in range(self.V):
+                # If the distance is not zero
+                if self.graph[pointer][edge_weight]:
+                    # Calculate the overall distance from the current pointer
+                    # to the edge
+                    overall_distance = distance[pointer] + self.graph[pointer][edge_weight]
+                    # If the distance is less than the current distance
+                    # Update the distance with the shortest
+                    if visitedMarking[edge_weight] == False and \
+                       distance[edge_weight] > overall_distance:
+                        distance[edge_weight] = overall_distance
+                        immSrc[edge_weight] =  pointer
+                    #print(distance)
+            #print(visitedMarking)
+        # Print the results
+        #self.printShortestDistances(distance, source)
+        #print("Visited Order:",visitedOrder, sep="\n")
+        #print("Immeadiate source:",immSrc, sep="\n")
+
+        while( destination ):
+            path.insert( 0, destination )
+            destination = immSrc[destination]
+        path.insert( 0, destination )
+        print("Path of shortest distance from source to destination: ", path )
+            
+g = Graph(20)
+g.fill_Matrix()
+#g.printMatrix()
+g.dijkstra_ALGA(0, 14)
