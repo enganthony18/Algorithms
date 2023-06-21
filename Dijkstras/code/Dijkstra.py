@@ -86,7 +86,8 @@ class Graph():
                 if self.graph[pointer][edge_weight]:
                     # Calculate the overall distance from the current pointer
                     # to the edge
-                    overall_distance = distance[pointer] + self.graph[pointer][edge_weight]
+                    overall_distance = distance[pointer] + \
+                                       self.graph[pointer][edge_weight]
                     # If the distance is less than the current distance
                     # Update the distance with the shortest
                     if visitedMarking[edge_weight] == False and \
@@ -96,7 +97,7 @@ class Graph():
                     #print(distance)
             #print(visitedMarking)
         # Print the results
-        #self.printShortestDistances(distance, source)
+        self.printShortestDistances(distance, source)
         #print("Visited Order:",visitedOrder, sep="\n")
         #print("Immeadiate source:",immSrc, sep="\n")
 
